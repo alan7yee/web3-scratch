@@ -1,6 +1,8 @@
-const fs = require("fs-extra");
-const ethers = require("ethers");
-require("dotenv").config();
+const ethers = require("ethers")
+// const solc = require("solc")
+const fs = require("fs-extra")
+require("dotenv").config()
+
 
 async function main() {
   // Here we use the hardhat network.
@@ -17,28 +19,32 @@ async function main() {
   console.log("Deploy contract...");
   const contract = await contractFactory.deploy();
 
-  console.log("Contract address: ", await contract.getAddress());
-  // When a transcation happen, we need to wait it
-  await contract.deploymentTransaction().wait(1);
+  await contract.waitForDeployment()
+  // When a transaction happens, we need to wait for it
+  await contract.deploymentTransaction()?.wait(1);
 
-  // console.log("Transcation:\n", contract.deploymentTransaction());
+  console.log("Contract address: ", await contract.getAddress());
+
+  // console.log("Transaction:\n", contract.deploymentTransaction());
   // const contractTransactionReceipt = await contract.deploymentTransaction().wait(1);
   // console.log("Receipt:\n" + JSON.stringify(contractTransactionReceipt.toJSON()));
 
   const currentNumber = await contract.retrieve();
   console.log("Initialized favorite number: ", currentNumber.toString());
+
   // store number
   // Wait for Previous Transactions to Confirm,
   // Otherwise, error: Nonce too low.
-  const transcation = await contract.store("123");
-  await transcation.wait(1);
-  const lastestNumber = await contract.retrieve();
-  console.log(`Lastest favorite number: ${lastestNumber.toString()}`);
+  const transaction = await contract.store("123");
+  await transaction.wait(1);
+
+  const latestNumber = await contract.retrieve();
+  console.log(`Latest favorite number: ${latestNumber.toString()}`);
 }
 
 main()
   .then(() => process.exit(0))
   .catch((error) => {
-    console.log(error);
+    console.error(error);
     process.exit(1);
   });

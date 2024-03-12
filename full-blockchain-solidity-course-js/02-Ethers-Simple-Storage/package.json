@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "compile": "solcjs --abi --bin --include-path node_modules/ --base-path . SimpleStorage.sol",
+    "compile": "solcjs --abi --bin  --include-path node_modules/ --base-path . SimpleStorage.sol",
     "solprettier": "prettier --write --plugin=prettier-plugin-solidity *.sol",
     "jsprettier": "prettier --write *.js"
   },
